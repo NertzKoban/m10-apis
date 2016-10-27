@@ -1,40 +1,56 @@
 # Install and load the jsonlite package
+install.packages('jsonlite')
+require(jsonlite)
 
 # Make a variable base.url that has the same base url from the omdb documentation.
 # (Hint: visit https://www.omdbapi.com/ to find the base url)
+base <- 'http://www.omdbapi.com/?'
 
-# Make a variable called movie that has the names of your favorite movie
-
-# Make a variable called move.no.spaces that holds movie where all the spaces
+# Make a variable called movie that has the name of your favorite movie
+movie <- 'Birdemic: Shock and Terror'
+  
+# Make a variable called movie.no.spaces that holds movie where all the spaces
 # are replaced with the '+' character
+movie.no.spaces <- gsub(' ', '+', movie)
 
 # Make a variable called "parameters" that holds a string with the parameters
 # to pass to the API. View the OMDb documentation to see which parameters
 # are available. Remember to separate parameters with the '&' character.
+parameters <- paste0('t=', movie.no.spaces, '&y=&plot=short&r=json')
 
 # Make a variable called request that is a string of a request URL made up of the base URL
 # and the parameters string
+request <- paste0(base, parameters)
 
 # Use fromJSON to retrieve JSON data from the omdb api using your request URL.
 # Store the result in a variable called movie.data
+movie.data <- fromJSON(request)
 
-# Make movie_data into a data frame using as.data.frame
+# Make movie.data into a data frame using as.data.frame
+movie.data <- as.data.frame(movie.data)
 
 # Write a function called Director that accepts a data frame of movie info and returns
 # A vector of strings that states a movie and the director of said movie.
+Director <- function(movie.info) {
+  info <- c(as.character(movie.info$Title), as.character(movie.info$Director))
+  return(info)
+}
 
 # Call Director with your favorite movie, and assign it to the variable movie.director
-
-# Bonus 
+movie.director <- Director(movie.data)
+# Bonus ----
 
 # Knowing the director of on movie is okay, but it'd be great to know the directors of different
 # movies. 
 
-# Start by making a vecotr of movies and save it to the variable movie.list
+# Start by making a vector of movies and save it to the variable movie.list
+movie.list <- c('Inception', 'Birdemic: Shock and Terror', 'Mad Max: Fury Road')
 
 # Remove spaces from each movie title
+movie.list <- gsub(" ", "+", movie.list)
 
 # Prepare this list to be passed in as parameters for the API
+parameters <- paste0('t=', movie.list, '&y=&plot=short&r=json')
 
 # Create API URL request and assign it to the variable api.request
 
